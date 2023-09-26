@@ -71,4 +71,5 @@ wikidata['acmi_id'] = wikidata['acmi_id'].str.split('/').str[-1]
 dataframe = dataframe.loc[~dataframe.acmi_id.isin(wikidata.acmi_id)]
 dataframe = dataframe[['acmi_id', 'label', 'description']]
 dataframe = dataframe.rename(columns={'acmi_id':'id', 'label':'name'})
+dataframe['id'] = 'works/'+dataframe['id'].astype(str)
 dataframe.to_csv(pathlib.Path.cwd() / 'acmi-mixnmatch.csv', index=False)
