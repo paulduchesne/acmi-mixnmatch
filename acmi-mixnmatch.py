@@ -67,5 +67,8 @@ query = '''
 wikidata = sparql_query(query, 'https://query.wikidata.org/sparql').drop_duplicates()
 wikidata['wikidata_id'] = wikidata['wikidata_id'].str.split('/').str[-1]
 wikidata['acmi_id'] = wikidata['acmi_id'].str.split('/').str[-1]
-dataframe = pandas.merge(dataframe, wikidata, on='acmi_id', how='left').fillna('')
+
+dataframe = dataframe.loc[~dataframe.acmi_id.isin(wikidata.acmi_id)]
+dataframe = dataframe[['acmi_id', 'label', 'description']]
+dataframe = dataframe.rename(columns={'acmi_id':'id', 'label':'name'})
 dataframe.to_csv(pathlib.Path.cwd() / 'acmi-mixnmatch.csv', index=False)
